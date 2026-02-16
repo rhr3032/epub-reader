@@ -13,6 +13,34 @@ export default function Home() {
   const [rendition, setRendition] = useState<Rendition | null>(null);
   const [location, setLocation] = useState<string>("");
   const [error, setError] = useState<string>("");
+  // Touch state for swipe navigation
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+
+  // Touch event handlers for swipe navigation
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchEndX.current = null;
+  };
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+  const handleTouchEnd = () => {
+    if (touchStartX.current !== null && touchEndX.current !== null && rendition) {
+      const delta = touchStartX.current - touchEndX.current;
+      if (Math.abs(delta) > 50) {
+        if (delta > 0) {
+          // Swipe left: next page
+          rendition.next();
+        } else {
+          // Swipe right: previous page
+          rendition.prev();
+        }
+      }
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
 
   // Keyboard navigation for desktop
   useEffect(() => {
@@ -102,6 +130,9 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.7 }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         ></motion.div>
         {rendition && (
           <motion.div className="mt-2 text-xs text-zinc-500 dark:text-zinc-400 text-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>
