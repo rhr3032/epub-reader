@@ -73,6 +73,13 @@ export default function Home() {
           if (viewerRef.current) {
             epub.renderTo(viewerRef.current, { width: "100%", height: "100%" });
             epub.ready.then(() => {
+              // Inject white text color for dark mode
+              epub.rendition.themes.default({
+                body: {
+                  color: "#fff !important",
+                  background: "#18181b !important"
+                }
+              });
               epub.rendition.display();
               setRendition(epub.rendition);
               epub.rendition.on("relocated", (loc: { start?: { displayed?: { page?: string } } }) => {
