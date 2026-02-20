@@ -1,4 +1,3 @@
-
 "use client";
 import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
@@ -73,12 +72,22 @@ export default function Home() {
           if (viewerRef.current) {
             epub.renderTo(viewerRef.current, { width: "100%", height: "100%" });
             epub.ready.then(() => {
-              // Inject white text color for dark mode
+              // Always inject white background and black text for EPUB content
               epub.rendition.themes.default({
                 body: {
-                  color: "#fff !important",
-                  background: "#18181b !important"
-                }
+                  color: "#111 !important",
+                  background: "#fff !important"
+                },
+                p: {
+                  color: "#111 !important",
+                  background: "#fff !important"
+                },
+                h1: { color: "#111 !important" },
+                h2: { color: "#111 !important" },
+                h3: { color: "#111 !important" },
+                h4: { color: "#111 !important" },
+                h5: { color: "#111 !important" },
+                h6: { color: "#111 !important" }
               });
               epub.rendition.display();
               setRendition(epub.rendition);
@@ -132,7 +141,7 @@ export default function Home() {
         {error && <motion.div className="text-red-500 mb-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>{error}</motion.div>}
         <motion.div
           ref={viewerRef}
-          className="w-full h-[70vh] min-h-75 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-zinc-50 dark:bg-zinc-900 mb-2 overflow-auto sm:w-full sm:h-[80vh] sm:min-h-125 sm:rounded-lg sm:border sm:bg-white sm:dark:bg-black shadow-md"
+          className="w-full h-[70vh] min-h-75 border border-zinc-200 rounded-lg bg-white mb-2 overflow-auto sm:w-full sm:h-[80vh] sm:min-h-125 sm:rounded-lg sm:border sm:bg-white shadow-md"
           style={{ height: '80vh', minHeight: 500 }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
